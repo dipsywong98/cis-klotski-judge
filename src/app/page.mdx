@@ -1,0 +1,56 @@
+# Klotski
+
+[Klotski(華容道)]((https://en.wikipedia.org/wiki/Klotski)) is an interesting game, why not making it.
+
+## Our set up
+
+There are 10 blocks of different variations:
+
+- 1 2x2
+- 4 1x2
+- 1 2x1
+- 4 1x1
+
+The blocks are placed inside a 4x5 box and the game goal is to slide the 2x2 block out of the box from the exit at the middle of the bottom of the box. You can only slide a block vertically or horizontally, without overlapping other blocks, and within the area inside the box.
+
+## Your task
+
+You need to expose a `POST` endpoint `/klotski` that accepts a json of
+
+```json
+{
+  "games": [
+    {
+      "board_url": "url1_to_the_board",
+      "move": "1U2D3L4R..."
+    },
+    {
+      "board_url": "url2_to_the_board",
+      "move": "1U2D3L4R..."
+    },
+    {
+      "board_url": "url3_to_the_board",
+      "move": "1U2D3L4R..."
+    }
+  ]
+}
+
+```
+
+and returns a json
+
+```json
+{
+  "result": {
+    "url1_to_the_board": {
+      "success": { ... }
+    },
+    "url2_to_the_board": {
+      "error": "reason"
+    },
+    "url3_to_the_board": {
+      "error": "reason"
+    }
+  }
+}
+```
