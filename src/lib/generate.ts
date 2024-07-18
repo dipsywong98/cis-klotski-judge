@@ -2,15 +2,15 @@ import Klotski from 'klotski'
 
 const klotski = new Klotski()
 
-type Size = [number, number] // rows, columns
-type Position = [number, number] // row, col
+export type Size = [number, number] // rows, columns
+export type Position = [number, number] // row, col
 
-interface Block {
+export interface Block {
   shape: Size
   position: Position
 }
 
-interface Game {
+export interface Game {
   blocks: Block[]
   boardSize: Size
   escapePoint: Position
@@ -19,7 +19,7 @@ interface Game {
 const BOARD_WIDTH = 4
 const BOARD_HEIGHT = 5
 
-const parseToBlocks = (definition: string) => {
+export const parse = (definition: string) => {
   const blocks: Record<string, Block> = {}
 
   const get = (row: number, col: number) => definition[col + row * BOARD_WIDTH]
@@ -61,39 +61,15 @@ const parseToBlocks = (definition: string) => {
     return
   })
 
-  return blocks
-}
-
-const solve = (blocks: Record<string, Block>) => {
-  const {A, ...rest} = blocks
+  const { A, ...rest } = blocks
   const game: Game = {
     blocks: [A, ...Object.values(rest)],
     boardSize: [5, 4],
     escapePoint: [3, 1]
   }
-
-  // var game = {
-  //   blocks: [
-  //     { "shape": [2, 2], "position": [0, 1] },
-  //     { "shape": [2, 1], "position": [0, 0] },
-  //     { "shape": [2, 1], "position": [0, 3] },
-  //     { "shape": [2, 1], "position": [2, 0] },
-  //     { "shape": [2, 1], "position": [2, 3] },
-  //     { "shape": [1, 2], "position": [2, 1] },
-  //     { "shape": [1, 1], "position": [3, 1] },
-  //     { "shape": [1, 1], "position": [3, 2] },
-  //     { "shape": [1, 1], "position": [4, 0] },
-  //     { "shape": [1, 1], "position": [4, 3] },
-  //   ],
-  //   boardSize: [6, 6],
-  //   escapePoint: [2, 4],
-  // };
-
-  return klotski.solve(game)
+  return game
 }
 
-const blocks = parseToBlocks('HAAIHAAIJBBKJNOKP@@Q')
-console.log(blocks)
-const result = solve(blocks)
-
-console.log(result)
+export const solve = (game: Game) => {
+  return klotski.solve(game)
+}
