@@ -1,25 +1,10 @@
-import Klotski from 'klotski'
+import { Block, Game, Move, Dir, BlockName } from "./type"
 
-const klotski = new Klotski()
-
-export type Size = [number, number] // rows, columns
-export type Position = [number, number] // row, col
-
-export interface Block {
-  shape: Size
-  position: Position
-}
-
-export interface Game {
-  blocks: Block[]
-  boardSize: Size
-  escapePoint: Position
-}
 
 const BOARD_WIDTH = 4
 const BOARD_HEIGHT = 5
 
-export const parse = (definition: string) => {
+export const parseGame = (definition: string) => {
   const blocks: Record<string, Block> = {}
 
   const get = (row: number, col: number) => definition[col + row * BOARD_WIDTH]
@@ -70,6 +55,22 @@ export const parse = (definition: string) => {
   return game
 }
 
-export const solve = (game: Game) => {
-  return klotski.solve(game)
+const parseEnum = <T extends Record<string, string | number>>(enumLike: T, value: keyof T | string): T[keyof T] => {
+  if (value in enumLike) {
+    return enumLike[value]
+  }
+  throw new Error(`${String(value)} does not exists in ${enumLike.toString()}`)
+}
+
+export const parseMove = (moveStr: string): Move[] => {
+  const moves: Move[] = []
+  for (let idx = 0; idx < moveStr.length; idx += 2) {
+    const blockIdx = parseEnum(BlockName, moveStr[idx])
+    const dirIdx = parseEnum(Dir, moveStr[idx + 1])
+    moves.push({
+      blockIdx,
+      dirIdx
+    })
+  }
+  return moves
 }

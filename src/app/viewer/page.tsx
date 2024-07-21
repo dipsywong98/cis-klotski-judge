@@ -1,6 +1,8 @@
 'use client'
 
-import { parse, Size, solve } from "@/lib/generate"
+import { parseGame } from "@/lib/parse"
+import { solve } from "@/lib/solve"
+import { Size } from "@/lib/type"
 import { useMemo, useState } from "react"
 
 const getColor = (shape: Size) => {
@@ -18,12 +20,18 @@ const getColor = (shape: Size) => {
   return 'green'
 }
 
+const board = 'HBBIHJKINJK@AACCAA@@'
+// const board = 'HAAIHAAIJBBKJNOKP@@Q'
+
 export default function ViewerPage() {
-  const [game, setGame] = useState(() => parse('HAAIHAAIJBBKJNOKP@@Q'))
+  const [game, setGame] = useState(() => parseGame(board))
   const solution = useMemo(() => solve(game), [game])
   
   const next = () => {
-    const {blockIdx, dirIdx} = solution.shift()
+    const {blockIdx, dirIdx} = solution.shift() ?? {}
+    if (blockIdx === undefined || dirIdx === undefined) {
+      return
+    }
     const dir = [
       [1, 0],
       [0, 1],
