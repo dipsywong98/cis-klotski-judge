@@ -11,46 +11,66 @@ There are 10 blocks of different variations:
 - 1 2x1
 - 4 1x1
 
-The blocks are placed inside a 4x5 box and the game goal is to slide the 2x2 block out of the box from the exit at the middle of the bottom of the box. You can only slide a block vertically or horizontally, without overlapping other blocks, and within the area inside the box.
+The blocks are placed inside a 5x4 box, they can only slide vertically or horizontally, without overlapping other blocks, and within the area inside the box.
+
+Each board configuration is defined using a string of 20 characters, where each unique letter represent a piece of block, each four characters in the string represent a row in the board, and @ character represent an empty space.
+
+For example, `BAACBAACDEEFDGHFI@@J` can be interpreted as
+
+```
+BAAC
+BAAC
+DEEF
+DGHF
+I@@J
+```
+
+and render as
+
+![alt text](image.png)
+
+Using a series of block letters and compass notations can denote the movement of blocks.
+
+For example
+
+```
+GSJWFSEEDEINGW
+```
+
+Denotes move block G to south, then block J to west, then block F to south, then block E to east, then block D to east, etc...
+
+You can visit [/viewer](/viewer) for more interactive visualization
 
 ## Your task
 
-You need to expose a `POST` endpoint `/klotski` that accepts a json of
+Given an initial board configuration, a series of moves, return the result board configuration string
+
+You need to expose a `POST` endpoint `/klotski` that accepts json of the following shape
 
 ```json
-{
-  "games": [
-    {
-      "board_url": "url1_to_the_board",
-      "move": "1U2D3L4R..."
-    },
-    {
-      "board_url": "url2_to_the_board",
-      "move": "1U2D3L4R..."
-    },
-    {
-      "board_url": "url3_to_the_board",
-      "move": "1U2D3L4R..."
-    }
-  ]
-}
+[
+  {
+    "board": "BCDEBCFGAAFGAAHHI@@J",
+    "moves": "IEIEASBSCSDWDWEWEWFNGNHNINIEAE"
+  },
+  {
+    "board": "BBAACCAADDE@FGG@HIJJ",
+    "moves": "EEDEFNGEHNINJWJWGSESIEHEFSDWASBEBECNDNFNHNJNGWGWESISASDEDEFNHNJNGNIWIWEWEWASJEJEGNENEWAW"
+  },
+  {
+    "board": "BAACDAAE@FF@GHIJGHIJ",
+    "moves": "DSBSFEDEBSAWEWENFNDEDEBEBEASEWEWCWCWFNDNDWJNJNIEBSBSDSDSAEGNGNHWDWDSASCSCEEEESFWGNHNDWJNINBEAS"
+  }
+]
 
 ```
 
-and returns a json
+and respond a json of corresponding resultant board
 
 ```json
-{
-  "result": {
-    "url1_to_the_board": {
-      "success": { ... }
-    },
-    "url2_to_the_board": {
-      "error": "reason"
-    },
-    "url3_to_the_board": {
-      "error": "reason"
-    }
-  }
-}
+[
+  "DEFGBCFGBCHH@AAI@AAJ",
+  "CCBBFHDDGGJJEAA@IAA@",
+  "GFFJGECJH@@IHAAIDAAB",
+]
 ```

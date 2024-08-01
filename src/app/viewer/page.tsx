@@ -1,9 +1,10 @@
 'use client'
 
-import { parseGame } from "@/lib/parse"
+import { parseGame, parseMove } from "@/lib/parse"
+import { serializeGame, serializeMoves } from "@/lib/serialize"
 import { solve } from "@/lib/solve"
 import { Size } from "@/lib/type"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 const getColor = (shape: Size) => {
   const [h, w] = shape
@@ -20,15 +21,44 @@ const getColor = (shape: Size) => {
   return 'green'
 }
 
-const board = 'HBBIHJKINJK@AACCAA@@'
+// const board = 'HBBIHJKINJK@AACCAA@@'
 // const board = 'HAAIHAAIJBBKJNOKP@@Q'
 
 export default function ViewerPage() {
+  const [board, _setBoard] = useState('BCCDBEEDFAAGFAAG@HI@')
   const [game, setGame] = useState(() => parseGame(board))
-  const solution = useMemo(() => solve(game), [game])
-  
+  const [solution, setSolution] = useState(() => solve(game))
+  const [moves, _setMoves] = useState(() => serializeMoves(solution))
+  const setBoard = (newBoard: string) => {
+    _setBoard(newBoard)
+    const nextGame = parseGame(newBoard)
+    setGame(nextGame)
+    try {
+      const newSolution = solve(nextGame)
+      _setMoves(serializeMoves(newSolution))
+      setSolution(newSolution)
+    } catch(e) {
+      _setMoves(moves)
+      setSolution(solution)
+      console.error(e)
+    }
+  }
+  const setMoves = (newMoves: string) => {
+    _setMoves(newMoves)
+    setSolution(parseMove(newMoves))
+  }
+  const letters = useMemo(() => {
+    const letters = ['A']
+    board.split('').forEach(ch => {
+      if (!letters.includes(ch) && ch !== '@') {
+        letters.push(ch)
+      }
+    })
+    return letters
+  }, [board])
+
   const next = () => {
-    const {blockIdx, dirIdx} = solution.shift() ?? {}
+    const { blockIdx, dirIdx } = solution.shift() ?? {}
     if (blockIdx === undefined || dirIdx === undefined) {
       return
     }
@@ -41,14 +71,21 @@ export default function ViewerPage() {
     const [drow, dcol] = dir[dirIdx]
     game.blocks[blockIdx].position[0] += drow
     game.blocks[blockIdx].position[1] += dcol
-    setGame({...game})
+    setGame({ ...game })
+    setMoves(serializeMoves(solution))
   }
 
   return (
     <div>
-      <button onClick={next} disabled={solution.length === 0}>{'>'}</button>
+      <div>
+        <label>Board <input value={board} onChange={({ target }) => setBoard(target.value)} /></label>
+      </div>
+      <div>
+        <label>Moves <input value={moves} onChange={({ target }) => setMoves(target.value)} /></label>
+      </div>
+      <button onClick={next} disabled={solution.length === 0}>Step forward</button>
       <div style={{ position: 'relative', width: '400px', height: '500px' }}>
-        {game.blocks.map((block, k) => (
+        {game.blocks.map((block, k) => (block &&
           <div
             key={k}
             style={{
@@ -61,12 +98,13 @@ export default function ViewerPage() {
               boxShadow: 'inset 0 0 2px #000',
               fontSize: '40px',
             }}>
-              <div style={{margin: '10px'}}>
-                {k}
-              </div>
+            <div style={{ margin: '10px' }}>
+              {letters[k]}
             </div>
+          </div>
         ))}
       </div>
+      <div>current board: <pre>{serializeGame(game)}</pre></div>
     </div>
   )
 }
