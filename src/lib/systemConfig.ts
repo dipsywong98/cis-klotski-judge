@@ -37,7 +37,11 @@ const config = {
   ENABLE_FAKE_STUDENT: env('ENABLE_FAKE_STUDENT', false),
   GRADE_TIMEOUT_SECOND: env('GRADE_TIMEOUT_SECOND', 30),
   APP_VERSION: version,
-  FAQ: env('FAQ', ['1. Do I need to validate the input payload?\nYou can assume the payload is valid'])
+  FAQ: env('FAQ', [
+    '1. Do I need to validate the input payload?\nYou can assume the payload is valid.',
+    '2. What are the possible block shapes?\nFind it youself.',
+    '3. How long the move string could be?\nShorter than 10^3.',
+  ])
 };
 
 export default config;

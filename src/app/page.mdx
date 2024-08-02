@@ -4,18 +4,11 @@
 
 ## Our set up
 
-There are 10 blocks of different variations:
-
-- 1 2x2
-- 4 1x2
-- 1 2x1
-- 4 1x1
-
 The blocks are placed inside a 5x4 box, they can only slide vertically or horizontally, without overlapping other blocks, and within the area inside the box.
 
 Each board configuration is defined using a string of 20 characters, where each unique letter represent a piece of block, each four characters in the string represent a row in the board, and @ character represent an empty space.
 
-For example, `BCCDBEEDFAAGFAAG@HI@` can be interpreted as
+For example, board string `BCCDBEEDFAAGFAAG@HI@` can be interpreted as
 
 ```
 BCCD
@@ -29,17 +22,17 @@ and render as
 
 ![alt text](image.png)
 
-The move notation is a string of length equals to an even number, when character at odd location indicate the block, even location indicate the sliding direction.
+The move notation is a string of even number length, where we can split it by every two characters - first character is the block name, second character is how we slide the block, using compass notation (NSWE).
 
-For example `HWIEAS` can be interpreted as `HW` `IE` `AS`, that is to move block H to west, then block I to east, then block A to south.
+For example the moves string `HWIEAS` can be splited to `HW` `IE` `AS`, that is to move block H to west, then block I to east, then block A to south.
 
 You can visit [/viewer](/viewer) for more interactive visualization.
 
 ## Your task
 
-Given an initial board configuration, a series of moves, return the result board configuration string.
+Given an initial board string, a moves string, return the result board string.
 
-You need to expose a `POST` endpoint `/klotski` that accepts json of the following shape
+You need to expose a `POST` endpoint `/klotski` that accepts a `application/json` payload of the following shape
 
 ```json
 [
@@ -68,6 +61,8 @@ and respond a json of corresponding resultant board
   "GFFJGECJH@@IHAAIDAAB",
 ]
 ```
+
+In actual test case the array will be longer, so as the moves string.
 
 ## FAQ
 
