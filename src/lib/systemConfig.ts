@@ -25,7 +25,7 @@ function env(key: string, fallback: EnvType): EnvType {
     return value !== undefined ? value === 'true' : fallback
   }
   if (Array.isArray(fallback)) {
-    return value?.split(',') ?? fallback;
+    return value?.split(';;') ?? fallback;
   }
   return Promise.resolve(value ?? fallback);
 }
@@ -37,6 +37,7 @@ const config = {
   ENABLE_FAKE_STUDENT: env('ENABLE_FAKE_STUDENT', false),
   GRADE_TIMEOUT_SECOND: env('GRADE_TIMEOUT_SECOND', 30),
   APP_VERSION: version,
+  FAQ: env('FAQ', ['1. Do I need to validate the input payload?\nYou can assume the payload is valid'])
 };
 
 export default config;

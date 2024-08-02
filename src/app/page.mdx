@@ -15,35 +15,29 @@ The blocks are placed inside a 5x4 box, they can only slide vertically or horizo
 
 Each board configuration is defined using a string of 20 characters, where each unique letter represent a piece of block, each four characters in the string represent a row in the board, and @ character represent an empty space.
 
-For example, `BAACBAACDEEFDGHFI@@J` can be interpreted as
+For example, `BCCDBEEDFAAGFAAG@HI@` can be interpreted as
 
 ```
-BAAC
-BAAC
-DEEF
-DGHF
-I@@J
+BCCD
+BEED
+FAAG
+FAAG
+@HI@
 ```
 
 and render as
 
 ![alt text](image.png)
 
-Using a series of block letters and compass notations can denote the movement of blocks.
+The move notation is a string of length equals to an even number, when character at odd location indicate the block, even location indicate the sliding direction.
 
-For example
+For example `HWIEAS` can be interpreted as `HW` `IE` `AS`, that is to move block H to west, then block I to east, then block A to south.
 
-```
-GSJWFSEEDEINGW
-```
-
-Denotes move block G to south, then block J to west, then block F to south, then block E to east, then block D to east, etc...
-
-You can visit [/viewer](/viewer) for more interactive visualization
+You can visit [/viewer](/viewer) for more interactive visualization.
 
 ## Your task
 
-Given an initial board configuration, a series of moves, return the result board configuration string
+Given an initial board configuration, a series of moves, return the result board configuration string.
 
 You need to expose a `POST` endpoint `/klotski` that accepts json of the following shape
 
@@ -74,3 +68,15 @@ and respond a json of corresponding resultant board
   "GFFJGECJH@@IHAAIDAAB",
 ]
 ```
+
+## FAQ
+
+import systemConfig from '@/lib/systemConfig'
+
+{systemConfig.FAQ.map(qna => {
+  const [q, a] = qna.split('\n')
+  return <>
+  <h4>{q}</h4>
+  <p>{a}</p>
+  </>
+})}

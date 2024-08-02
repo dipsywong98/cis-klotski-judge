@@ -33,7 +33,13 @@ export async function POST(req: Request) {
   const { callbackUrl, runId, teamUrl } = body
   const { input, output: expecteds, configs } = generateTestCases()
 
-  const payload = await axios.post(`${teamUrl.replace(/\/$/, '')}/klotski`, input, { timeout: config.GRADE_TIMEOUT_SECOND * 1000 })
+  const payload = await axios.post(`${teamUrl.replace(/\/$/, '')}/klotski`, input, {
+    timeout: config.GRADE_TIMEOUT_SECOND * 1000,
+    headers: {
+      "Content-Type": 'applications/json',
+      "Accept": 'applications/json',
+    }
+  })
     .then(({ data: actuals }) => {
       const { message, score } = grade(actuals, expecteds, configs)
       const payload: ICallbackRequest = { message, score, runId }

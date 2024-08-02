@@ -33,14 +33,13 @@ export default function ViewerPage() {
     _setBoard(newBoard)
     const nextGame = parseGame(newBoard)
     setGame(nextGame)
-    try {
-      const newSolution = solve(nextGame)
+    const newSolution = solve(nextGame)
+    if (newSolution === null) {
+      _setMoves('')
+      setSolution([])
+    } else {
       _setMoves(serializeMoves(newSolution))
       setSolution(newSolution)
-    } catch(e) {
-      _setMoves(moves)
-      setSolution(solution)
-      console.error(e)
     }
   }
   const setMoves = (newMoves: string) => {
