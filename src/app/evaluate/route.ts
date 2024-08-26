@@ -36,8 +36,8 @@ export async function POST(req: Request) {
   const payload = await axios.post(`${teamUrl.replace(/\/$/, '')}/klotski`, input, {
     timeout: config.GRADE_TIMEOUT_SECOND * 1000,
     headers: {
-      "Content-Type": 'applications/json',
-      "Accept": 'applications/json',
+      "Content-Type": 'application/json',
+      "Accept": 'application/json',
     }
   })
     .then(({ data: actuals }) => {
